@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <script type="application/javascript" src="./js/helpers.js"></script>
+        <script type="application/javascript" src="./js/cell_decision.js"></script>
+        <script type="application/javascript" src="./js/sudoku_board_data.js"></script>
+        <script type="application/javascript" src="./js/sudoku_renderer.js"></script>
+        <script type="application/javascript" src="./js/sudoku_board.js"></script>
+        <style type="text/css">
+            @media print
+            {
+                .no-print, .no-print *
+                {
+                    display: none !important;
+                }
+            }
+
+            table {
+                border-collapse: collapse;
+                text-align: center;
+                margin: auto;
+            }
+            table, th, td {
+                border: 2px solid black;
+            }
+            td.blockTop {
+                border-top: 5px solid black;
+            }
+            td.blockLeft {
+                border-left: 5px solid black;
+            }
+            td.blockRight {
+                border-right: 5px solid black;
+            }
+            td.blockBottom {
+                border-bottom: 5px solid black;
+            }
+
+            table.size4 td {
+                font-size: 80pt;
+                width: 1.5in;
+                height: 1.5in;
+                text-align: center;
+            }
+
+            table.size6 td {
+                font-size: 80pt;
+                width: 1.2in;
+                height: 1.2in;
+                text-align: center;
+            }
+        </style>
+        <script type="application/javascript">
+            function generateBoard(size, numEmpty) {
+                let board = new SudokuBoard(size);
+                board.createRandomBoard();
+                console.table(board.boardData.board);
+                board.clearRandomCells(numEmpty);
+                board.render();
+            }
+            function generateButtonClicked() {
+                let sizeSelect = document.getElementById('size');
+                let size = parseInt(sizeSelect.options[sizeSelect.selectedIndex].value, 10);
+                let numEmpty = parseInt(document.getElementById('num_empty').value);
+
+                if (isNaN(numEmpty)) {
+                    alert('Invalid input for Empty Cells: ' + numEmpty);
+                } else {
+                    if (numEmpty > 3*size) {
+                        alert('I can not guarantee the generated board is uniquely solvable');
+                    }
+                    console.log(size, numEmpty);
+                    generateBoard(size, numEmpty);
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="options_form" class="no-print">
+            <div>
+                <label for="size">Size:</label>
+                <select id="size" name="size">
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="9">9</option>
+                </select>
+            </div>
+            <div>
+                <label for="num_empty">Empty Cells:</label>
+                <input id="num_empty" name="num_empty">
+            </div>
+            <div>
+                <button onclick="generateButtonClicked();">Generate</button>
+            </div>
+        </div>
+        <table id="sudoku_table"></table>
+    </body>
+</html>
